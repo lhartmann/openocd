@@ -357,6 +357,11 @@ static int bitbang_swd_init(void)
 
 static void bitbang_exchange(bool rnw, uint8_t buf[], unsigned int offset, unsigned int bit_cnt)
 {
+	if (bitbang_interface->exchange) {
+		bitbang_interface->exchange(rnw, buf, offset, bit_cnt);
+		return;
+	}
+
 	LOG_DEBUG("bitbang_exchange");
 	int tdi;
 

@@ -318,6 +318,10 @@ AC_ARG_ENABLE([sysfsgpio],
   AS_HELP_STRING([--enable-sysfsgpio], [Enable building support for programming driven via sysfs gpios.]),
   [build_sysfsgpio=$enableval], [build_sysfsgpio=no])
 
+AC_ARG_ENABLE([netocd],
+  AS_HELP_STRING([--enable-netocd], [Enable building support for programming driven via NETOCD remote gpios.]),
+  [build_netocd=$enableval], [build_netocd=no])
+
 AS_CASE([$host_os],
   [linux*], [],
   [
@@ -582,6 +586,12 @@ AS_IF([test "x$build_target64" = "xyes"], [
   AC_DEFINE([BUILD_TARGET64], [0], [0 if you don't want 64-bit addresses.])
 ])
 
+AS_IF([test "x$build_netocd" = "xyes"], [
+  build_bitbang=yes
+  AC_DEFINE([BUILD_NETOCD], [1], [1 if you want the NETOCD driver.])
+], [
+  AC_DEFINE([BUILD_NETOCD], [0], [0 if you don't want NETOCD driver.])
+])
 
 PKG_CHECK_MODULES([LIBUSB1], [libusb-1.0], [
 	use_libusb1=yes
@@ -690,6 +700,7 @@ AM_CONDITIONAL([OOCD_TRACE], [test "x$build_oocd_trace" = "xyes"])
 AM_CONDITIONAL([REMOTE_BITBANG], [test "x$build_remote_bitbang" = "xyes"])
 AM_CONDITIONAL([BUSPIRATE], [test "x$build_buspirate" = "xyes"])
 AM_CONDITIONAL([SYSFSGPIO], [test "x$build_sysfsgpio" = "xyes"])
+AM_CONDITIONAL([NETOCD], [test "x$build_netocd" = "xyes"])
 AM_CONDITIONAL([USE_LIBUSB0], [test "x$use_libusb0" = "xyes"])
 AM_CONDITIONAL([USE_LIBUSB1], [test "x$use_libusb1" = "xyes"])
 AM_CONDITIONAL([IS_CYGWIN], [test "x$is_cygwin" = "xyes"])
